@@ -1,6 +1,3 @@
-#  --------------------------------------------------------------------------------
-#                 Evaluates a given board and returns a score
-#  --------------------------------------------------------------------------------
 def evaluate(gamestate, depth):
 
     # Initialize scores and other parameters
@@ -8,11 +5,11 @@ def evaluate(gamestate, depth):
 
     # Check if in checkmate or stalemate
     if gamestate.is_check_mate:
-        return 1e9 + depth if gamestate.is_white_turn else -1e9 - depth
+        return 1e10 + depth if gamestate.is_white_turn else -1e10 - depth
     if gamestate.is_stale_mate:
         return 0
 
-    # Piece values with base and piece-dependent values (updated in make/unmake move functions)
+    # Piece values with base and piece-dependent values
     white_score += gamestate.piece_values[0]
     black_score += gamestate.piece_values[1]
 
@@ -21,19 +18,19 @@ def evaluate(gamestate, depth):
 
     castling_bonus = 50 
 
-    double_pawn_punishment = -40  # Give punishment if there are 2 pawns on the same column, maybe increase if late in game. Calibrate value
-    isolated_pawn_punishment = -40  # If the pawn has no allies on the columns next to it, calibrate value later
+    double_pawn_punishment = -30  # Give punishment if there are 2 pawns on the same file, maybe increase if late in game. Calibrate value
+    isolated_pawn_punishment = -40  # If the pawn has no neighbouring pawns on the files next to it
 
     knight_endgame_punishment = -10  # Punishment for knights in endgame, per piece
     bishop_endgame_bonus = 10  # Bonus for bishops in endgame, per piece
 
-    rook_on_semi_open_file_bonus = 20  # Give rook a bonus for being on an open file without any own pawns, right now it is per rook
-    rook_on_open_file_bonus = 20  # Give rook a bonus for being on an open file without any pawns, right now it is per rook
+    rook_on_semi_open_file_bonus = 20  # Give rook a bonus for being on an open file without any own pawns
+    rook_on_open_file_bonus = 30  # Give rook a bonus for being on an open file without any pawns
 
     blocking_d_e_pawn_punishment = -40  # Punishment for blocking unmoved pawns on d and e file 
 
     knight_pawn_bonus = 2  # Knights better with lots of pawns
-    bishop_pawn_punishment = -2  # Bishops worse with lots of pawns
+    bishop_pawn_punishment = -5  # Bishops worse with lots of pawns
     rook_pawn_punishment = -2  # Rooks worse with lots of pawns
 
     center_attack_bonus_factor = 1  # Factor to multiply with how many center squares are attacked by own pieces
@@ -58,10 +55,6 @@ def evaluate(gamestate, depth):
                           6, 5, 4, 3, 3, 4, 5, 6]
     
     directions = [-10, -1, 10, 1, -11, -9, 9, 11]
-
-#  --------------------------------------------------------------------------------
-#                    Pre-calculated tables to speed up game
-#  --------------------------------------------------------------------------------
 
 # Number of squares that a piece is attacking the opponent king
     piece_king_attack = {'K': 0,
@@ -101,10 +94,7 @@ def evaluate(gamestate, depth):
                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                       0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-
-# -------------------------------------------------------------------------------------------------
-#                          Up until endgame evaluation
-# -------------------------------------------------------------------------------------------------
+    
 
     # Opening related bonuses/punishment
     if len(gamestate.move_log) < 30:
@@ -157,18 +147,12 @@ def evaluate(gamestate, depth):
     white_score += gamestate.king_attacks_white * king_attack_bonus_factor
     black_score += gamestate.king_attacks_black * king_attack_bonus_factor
 
-# -------------------------------------------------------------------------------------------------
-#                              Midgame related functions
-# -------------------------------------------------------------------------------------------------
 
     if gamestate.endgame < 1:
         # Bonus for attacking squares in the center
         white_score += gamestate.center_attacks_white * center_attack_bonus_factor
         black_score += gamestate.center_attacks_black * center_attack_bonus_factor
 
-# -------------------------------------------------------------------------------------------------
-#                               Endgame related functions
-# -------------------------------------------------------------------------------------------------
 
     if gamestate.endgame == 1:
 
@@ -190,7 +174,7 @@ def evaluate(gamestate, depth):
         white_score += (gamestate.piece_dict[0]['R'] * gamestate.piece_dict[0]['p']) * rook_pawn_punishment
         black_score += (gamestate.piece_dict[1]['R'] * gamestate.piece_dict[1]['p']) * rook_pawn_punishment
 
-        # Finding mate with no pawns on the board and without syzygy.
+        # Finding mate with no pawns on the board and without syzygy tablebase.
         if gamestate.piece_dict[0]['p'] == gamestate.piece_dict[1]['p'] == 0:
             # Add a small term for piece values, otherwise the algorithm might sacrifice a piece sometimes for no reason.
             white_score = 0.05*gamestate.piece_values[0]
