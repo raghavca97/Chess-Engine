@@ -93,12 +93,12 @@ def treestart(node, depth):
         return bfd(node, depth)
 
 
-def simulategame(s, d):
+def simulategame(s, d, nm):
     random.seed(s)
     depth = d
     board = chess.Board()
     nmoves = 0
-    while board.is_game_over() == False and nmoves <30:
+    while board.is_game_over() == False and nmoves < nm:
         print(board, '\n')
         root = MoveNode(board)
         ev = treestart(root, depth)
@@ -127,7 +127,7 @@ def evalposfromfen(fen, d):
 # In[4]:
 
 
-evalposfromfen("rnbqk2r/pppp1ppp/5n2/2b5/4Pp2/2NP4/PPP3PP/R1BQKBNR w KQkq - 0 5", 3)
+evalposfromfen("rnbqk2r/pppp1ppp/5n2/2b5/4Pp2/2NP4/PPP3PP/R1BQKBNR w KQkq - 0 5", 3, 15)
 
 
 
