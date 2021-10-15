@@ -17,7 +17,7 @@ class MoveNode:
         
 def evaluate(board):
     #Random number generator for evaluation for now
-    return random.randint(-5,5)
+    return random.gauss(0, 1)
     
     
 def wfa(node, depth):
@@ -75,7 +75,6 @@ def bfd(node, depth):
         node.children.append(child)
         childeval.append(wfa(child, depth-1))
     
-    
     #iterate through list of children nodes to get the node with the min eval
     node.eval = childeval[0]
     node.next = node.children[0]
@@ -94,9 +93,23 @@ def treestart(node, depth):
         return bfd(node, depth)
 
 
-def test1():
-    depth = 4
+def simulategame(s, d):
+    random.seed(s)
+    depth = d
     board = chess.Board()
+    nmoves = 0
+    while board.is_game_over() == False and nmoves <30:
+        print(board, '\n')
+        root = MoveNode(board)
+        ev = treestart(root, depth)
+        print("eval: ",ev)
+        board.push(root.nextmove)
+        nmoves += 1
+        
+        
+def evalposfromfen(fen, d):
+    depth = d
+    board = chess.Board(fen)
     print(board, '\n')
     root = MoveNode(board)
     ev = wfa(root, depth)
@@ -110,13 +123,11 @@ def test1():
         temp = temp.next
         i=i+1
     print('...')
-        
-
 
 # In[4]:
 
 
-test1()
+evalposfromfen("rnbqk2r/pppp1ppp/5n2/2b5/4Pp2/2NP4/PPP3PP/R1BQKBNR w KQkq - 0 5", 3)
 
 
 
