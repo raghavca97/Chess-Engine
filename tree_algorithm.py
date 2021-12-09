@@ -162,8 +162,12 @@ def evalboard(board, depth):
 def evalposfromfen(fen, depth):
     board = chess.Board(fen)
     evalboard(board,depth)
-    
+        
+        
+def evalpostest():
+    board = chess.Board()
+    evaluate(board,0)   
 
     
     
-evalposfromfen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 3)
+#evalposfromfen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1", 3)

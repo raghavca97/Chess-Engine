@@ -292,7 +292,7 @@ def evaluate(board, depth): # Returns advantage of a particular player(scaled by
                 if piecedict['r'] == piecedict['q'] == 0 and piecedict['b'] >= 1 and piecedict['n'] >= 1:
                     pass
 
-    print("White advantage: ", white_score - black_score + 1560)                    
-    return black_score - white_score - 1560
+    print("White advantage: ", white_score - black_score + 1300)                    
+    return black_score - white_score - 1300
 
 
