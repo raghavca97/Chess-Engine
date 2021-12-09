@@ -18,15 +18,15 @@ def evaluate(board, depth): # Returns advantage of a particular player(scaled by
     piece_value_white = {'K': 60000,
                         'Q': 900,
                         'R': 490,
-                        'B': 320,
-                        'N': 290,
+                        'B': 305,
+                        'N': 295,
                         'P': 100}
     
     piece_value_black = {'k': 60000,
                         'q': 900,
                         'r': 490,
-                        'b': 320,
-                        'n': 290,
+                        'b': 305,
+                        'n': 295,
                         'p': 100}
 
     pos = str(board.fen)
@@ -47,21 +47,21 @@ def evaluate(board, depth): # Returns advantage of a particular player(scaled by
     bishop_pair_bonus = 15 #Bonus for having a bishop pair
     mobility_factor = 5 #Value yet to be incorporated and optimised
 
-    castling_bonus = 50 #Castling implies a safer king and hence this bonus is given(value to be optimised)
+    castling_bonus = 100 #Castling implies a safer king and hence this bonus is given(value to be optimised)
 
     double_pawn_punishment = -40  # Give punishment if there are 2 pawns on the same column, maybe increase if late in game. Calibrate value
     isolated_pawn_punishment = -40  # If the pawn has no allies on the columns next to it, calibrate value later
 
-    knight_endgame_punishment = -10  # Punishment for knights in endgame, per piece
-    bishop_endgame_bonus = 10  # Bonus for bishops in endgame, per piece
+    knight_endgame_punishment = -20  # Punishment for knights in endgame, per piece
+    bishop_endgame_bonus = 20  # Bonus for bishops in endgame, per piece
 
-    rook_on_semi_open_file_bonus = 20  # Give rook a bonus for being on an open file without any own pawns, right now it is per rook
-    rook_on_open_file_bonus = 20  # Give rook a bonus for being on an open file without any pawns, right now it is per rook
+    rook_on_semi_open_file_bonus = 40  # Give rook a bonus for being on an open file without any own pawns, right now it is per rook
+    rook_on_open_file_bonus = 40  # Give rook a bonus for being on an open file without any pawns, right now it is per rook
 
-    blocking_d_e_pawn_punishment = -40  # Punishment for blocking unmoved pawns on d and e file 
+    blocking_d_e_pawn_punishment = -60  # Punishment for blocking unmoved pawns on d and e file 
 
-    knight_pawn_bonus = 2  # Knights better with lots of pawns
-    bishop_pawn_punishment = -2  # Bishops worse with lots of pawns
+    knight_pawn_bonus = 10  # Knights better with lots of pawns
+    bishop_pawn_punishment = -10  # Bishops worse with lots of pawns
     rook_pawn_punishment = -2  # Rooks worse with lots of pawns
 
     center_attack_bonus_factor = 1  # Factor to multiply with how many center squares are attacked by own pieces(yet to incorporate)
