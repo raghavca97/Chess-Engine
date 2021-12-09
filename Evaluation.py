@@ -28,20 +28,6 @@ def evaluate(board, depth): # Returns advantage of a particular player(scaled by
                         'b': 320,
                         'n': 290,
                         'p': 100}
-    
-    piece_value = {'K': 60000,
-                   'Q': 900,
-                   'R': 490,
-                   'B': 320,
-                   'N': 290,
-                   'P': 100,
-                   'k': -60000,
-                   'q': -900,
-                   'r': -490,
-                   'b': -320,
-                   'n': -290,
-                   'p': -100}
-    
 
     pos = str(board.fen)
     piecedict = {}
@@ -51,18 +37,12 @@ def evaluate(board, depth): # Returns advantage of a particular player(scaled by
         else:
             piecedict[i] = 1
     
-    print(piecedict.keys())        
-    white_score = 0
-    black_score = 0
+    white_score += piecedict['K']*piece_value_white['K'] + piecedict['Q']*piece_value_white['Q'] + piecedict['B']*piece_value_white['B'] + piecedict['N']*piece_value_white['N'] + piecedict['R']*piece_value_white['R'] + piecedict['P']*piece_value_white['P']
+    black_score += piecedict['k']*piece_value_black['k'] + piecedict['q']*piece_value_black['q'] + piecedict['b']*piece_value_black['b'] + piecedict['n']*piece_value_black['n'] + piecedict['r']*piece_value_black['r'] + piecedict['p']*piece_value_black['p']
+
+    white_material_score = white_score
+    black_material_score = black_score
     
-    for key in piecedict.keys():
-        if key in piece_value.keys():
-            if piece_value[key]>0:
-                white_score += piecedict[key]*piece_value[key]
-            else:
-                black_score -= piecedict[key]*piece_value[key]
-    #white_score += piecedict['K']*piece_value_white['K'] + piecedict['Q']*piece_value_white['Q'] + piecedict['B']*piece_value_white['B'] + piecedict['N']*piece_value_white['N'] + piecedict['R']*piece_value_white['R'] + piecedict['P']*piece_value_white['P']
-    #black_score += piecedict['k']*piece_value_black['k'] + piecedict['q']*piece_value_black['q'] + piecedict['b']*piece_value_black['b'] + piecedict['n']*piece_value_black['n'] + piecedict['r']*piece_value_black['r'] + piecedict['p']*piece_value_black['p']
 
     bishop_pair_bonus = 15 #Bonus for having a bishop pair
     mobility_factor = 5 #Value yet to be incorporated and optimised
@@ -266,7 +246,7 @@ def evaluate(board, depth): # Returns advantage of a particular player(scaled by
 #                               Endgame related functions
 # -------------------------------------------------------------------------------------------------
 
-    if board.fullmove_number > 40:
+    if white_material_score+black_material_score < 38:
 
         # Knights are worth slightly less in endgame
         white_score += piecedict['N'] * knight_endgame_punishment
@@ -313,4 +293,6 @@ def evaluate(board, depth): # Returns advantage of a particular player(scaled by
                     pass
 
     print("White advantage: ", white_score - black_score + 1560)                    
-    return white_score - black_score + 1560
+    return black_score - white_score - 1560
+
+

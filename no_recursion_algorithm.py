@@ -24,7 +24,7 @@ class MoveNode:
 def whiteForAdvantage(node, depth, currentdepth, al, be, tolerance):
     #evaluate current board
     #print("white to move, depth = ", currentdepth," remaining = ",depth," ",al," ",be, "\n")
-    node.eval = -1*evaluate(node.board, currentdepth)
+    node.eval = evaluate(node.board, currentdepth)
     print(node.board, '\n\n')
     
     #return if max depth has been reached
@@ -81,7 +81,7 @@ def whiteForAdvantage(node, depth, currentdepth, al, be, tolerance):
 def blackForDefense(node, depth, currentdepth, al, be, tolerance):
     #evaluate current board
     print("Black to move, depth = ", currentdepth," remaining = ",depth," ",al," ",be, "\n")
-    node.eval = -1*evaluate(node.board, currentdepth)
+    node.eval = evaluate(node.board, currentdepth)
     print(node.board, '\n\n')
     
     #return if max depth has been reached
@@ -132,7 +132,7 @@ def blackForDefense(node, depth, currentdepth, al, be, tolerance):
 #Outputs:
 #ev: evaluation of the board associated with the input node, given in centipawn advantage for white
 def treestart(node, depth, tolerance):
-    al = be = -1*evaluate(node.board, 0)
+    al = be = evaluate(node.board, 0)
     if node.board.turn == chess.WHITE:
         return whiteForAdvantage(node, depth, 0, al, be, tolerance)
     else:
